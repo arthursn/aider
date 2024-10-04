@@ -1,6 +1,7 @@
 import importlib
 import os
 import warnings
+from typing import List, Dict
 
 warnings.filterwarnings("ignore", category=UserWarning, module="pydantic")
 
@@ -16,6 +17,47 @@ os.environ["LITELLM_MODE"] = "PRODUCTION"
 
 class LazyLiteLLM:
     _lazy_module = None
+
+    @staticmethod
+    def ensure_alternating_roles(
+        messages: List[Dict[str, str]],
+        filler_messages: Dict[str, str] = {
+            "user": "",
+            "assistant": "",
+        },
+    ) -> List[Dict[str, str]]:
+        """
+        Ensures that the sequence of messages alternates between 'user' and
+        'assistant' roles, inserting filler messages if necessary.
+
+        Args:
+            messages (List[Dict[str, str]]): List of message dictionaries with
+            'role' and 'content' keys.
+            filler_messages (Dict[str, str], optional): Filler messages for
+            'user' and 'assistant' roles. Defaults to {"user": "", "assistant": ""}.
+
+        Returns:
+            List[Dict[str, str]]: List of message dictionaries with alternating
+            roles.
+        """
+        fixed_messages = []
+        allowed_roles = ["system", "user", "assistant"]
+        previous_role = None
+        for msg in messages:
+            role = msg["role"]
+            assert role in allowed_roles, f"Role {role} not allowed"
+            if role == previous_role:
+                filler_role = "assistant" if role == "user" else "user"
+                fixed_messages.append(
+                    {
+                        "role": filler_role,
+                        "content": filler_messages[filler_role],
+                    }
+                )
+            fixed_messages.append(msg)
+            previous_role = msg["role"]
+
+        return fixed_messages
 
     def __getattr__(self, name):
         if name == "_lazy_module":

@@ -58,7 +58,7 @@ def send_completion(
 
     kwargs = dict(
         model=model_name,
-        messages=messages,
+        messages=litellm.ensure_alternating_roles(messages),
         stream=stream,
     )
     if temperature is not None:

@@ -1079,7 +1079,9 @@ class Coder:
                 try:
                     completion = litellm.completion(
                         model=self.main_model.name,
-                        messages=self.cache_warming_chunks.cacheable_messages(),
+                        messages=litellm.ensure_alternating_roles(
+                            self.cache_warming_chunks.cacheable_messages()
+                        ),
                         stream=False,
                         **kwargs,
                     )
