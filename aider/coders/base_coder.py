@@ -27,7 +27,7 @@ from aider.llm import litellm
 from aider.repo import ANY_GIT_ERROR, GitRepo
 from aider.repomap import RepoMap
 from aider.run_cmd import run_cmd
-from aider.sendchat import retry_exceptions, send_completion
+from aider.sendchat import RETRY_TIMEOUT, retry_exceptions, send_completion
 from aider.utils import format_content, format_messages, format_tokens, is_image_file
 
 from ..dump import dump  # noqa: F401
@@ -1131,7 +1131,7 @@ class Coder:
                 except retry_exceptions() as err:
                     self.io.tool_warning(str(err))
                     retry_delay *= 2
-                    if retry_delay > 60:
+                    if retry_delay > RETRY_TIMEOUT:
                         break
                     self.io.tool_output(f"Retrying in {retry_delay:.1f} seconds...")
                     time.sleep(retry_delay)
@@ -1193,12 +1193,16 @@ class Coder:
         else:
             content = ""
 
+        try:
+            self.reply_completed()
+        except KeyboardInterrupt:
+            interrupted = True
+
         if interrupted:
             content += "\n^C KeyboardInterrupt"
             self.cur_messages += [dict(role="assistant", content=content)]
             return
 
-        self.reply_completed()
         edited = self.apply_updates()
 
         self.update_cur_messages()

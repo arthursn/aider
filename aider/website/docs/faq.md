@@ -133,7 +133,7 @@ To run the project locally, follow these steps:
 
 ```
 # Clone the repository
-git clone git@github.com:paul-gauthier/aider.git
+git clone git@github.com:Aider-AI/aider.git
 
 # Navigate to the project directory
 cd aider
@@ -198,7 +198,7 @@ Yes, you can now share aider chat logs in a pretty way.
 1. Copy the markdown logs you want to share from `.aider.chat.history.md` and make a github gist. Or publish the raw markdown logs on the web any way you'd like.
 
    ```
-   https://gist.github.com/paul-gauthier/2087ab8b64034a078c0a209440ac8be0
+   https://gist.github.com/Aider-AI/2087ab8b64034a078c0a209440ac8be0
    ```
 
 2. Take the gist URL and append it to:
@@ -210,5 +210,13 @@ Yes, you can now share aider chat logs in a pretty way.
 This will give you a URL like this, which shows the chat history like you'd see in a terminal:
 
 ```
-https://aider.chat/share/?mdurl=https://gist.github.com/paul-gauthier/2087ab8b64034a078c0a209440ac8be0
+https://aider.chat/share/?mdurl=https://gist.github.com/Aider-AI/2087ab8b64034a078c0a209440ac8be0
 ```
+
+## What is Aider AI LLC?
+
+Aider AI LLC is the company behind the aider AI coding tool.
+Aider is 
+[open source and available on GitHub](https://github.com/Aider-AI/aider)
+under an 
+[Apache 2.0 license](https://github.com/Aider-AI/aider/blob/main/LICENSE.txt).
